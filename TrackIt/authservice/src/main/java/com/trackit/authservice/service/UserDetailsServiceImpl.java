@@ -11,7 +11,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Component
@@ -36,9 +39,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userInfoRepository.findByUsername(userInfoDto.getUsername());
     }
 
-
     public String getUserByUsername(String username) {
         return Optional.of(userInfoRepository.findByUsername(username)).map(UserInfo::getUserId).orElse(null);
+    }
+
+    public String signupUser(UserInfoDto userInfoDto) {
+        userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
+        if(Objects.nonNull(checkIfUserAlreadyExists(userInfoDto))) {
+            return null;
+        }
+        String userId = UUID.randomUUID().toString();
+        UserInfo userInfo = new UserInfo(userId, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>());
+        userInfoRepository.save(userInfo);
+        return userId;
     }
 
 }
