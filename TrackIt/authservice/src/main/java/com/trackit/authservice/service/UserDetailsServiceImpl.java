@@ -3,6 +3,7 @@ package com.trackit.authservice.service;
 import com.trackit.authservice.entity.UserInfo;
 import com.trackit.authservice.model.UserInfoDto;
 import com.trackit.authservice.repository.UserInfoRepository;
+import com.trackit.authservice.utils.Validation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,6 +45,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public String signupUser(UserInfoDto userInfoDto) {
+        if(!Validation.validateUser(userInfoDto)) {
+            return null;
+        }
         userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
         if(Objects.nonNull(checkIfUserAlreadyExists(userInfoDto))) {
             return null;
