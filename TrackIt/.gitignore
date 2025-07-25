@@ -43,5 +43,14 @@ out/
 /authservice/.HELP.md
 /authservice/gradlew
 /authservice/settings.gradle
-authservice/src/main/resources/application.properties
+/authservice/src/main/resources/application.properties
 
+
+/userservice/.gradle
+/userservice/gradle
+/userservice/.gitattributes
+/userservice/.gitattriutes/
+/userservice/.HELP.md
+/userservice/gradlew
+/userservice/settings.gradle
+/userservice/src/main/resources/application.properties
