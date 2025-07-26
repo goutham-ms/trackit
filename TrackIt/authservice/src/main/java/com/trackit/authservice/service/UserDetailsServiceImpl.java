@@ -1,6 +1,7 @@
 package com.trackit.authservice.service;
 
 import com.trackit.authservice.entity.UserInfo;
+import com.trackit.authservice.event.UserInfoProducer;
 import com.trackit.authservice.model.UserInfoDto;
 import com.trackit.authservice.repository.UserInfoRepository;
 import com.trackit.authservice.utils.Validation;
@@ -25,6 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserInfoRepository userInfoRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserInfoProducer userInfoProducer;
 
 
     @Override
@@ -55,6 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String userId = UUID.randomUUID().toString();
         UserInfo userInfo = new UserInfo(userId, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>());
         userInfoRepository.save(userInfo);
+        userInfoProducer.sendEventToKafka(userInfoDto);
         return userId;
     }
 

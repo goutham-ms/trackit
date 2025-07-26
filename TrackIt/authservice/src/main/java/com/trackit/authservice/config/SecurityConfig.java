@@ -1,5 +1,6 @@
 package com.trackit.authservice.config;
 
+import com.trackit.authservice.event.UserInfoProducer;
 import com.trackit.authservice.repository.UserInfoRepository;
 import com.trackit.authservice.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,13 @@ public class SecurityConfig {
     @Autowired
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
+    @Autowired
+    private final UserInfoProducer userInfoProducer;
+
     @Bean
     @Autowired
     public UserDetailsService userDetailsService(UserInfoRepository userInfoRepository, PasswordEncoder passwordEncoder) {
-        return new UserDetailsServiceImpl(userInfoRepository, passwordEncoder);
+        return new UserDetailsServiceImpl(userInfoRepository, passwordEncoder, userInfoProducer);
     }
 
     @Bean
@@ -45,7 +49,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable).cors(CorsConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/*").permitAll()
+                        .requestMatchers("/auth/v1/login", "/auth/v1/signup", "/auth/v1/refreshToken").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
