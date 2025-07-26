@@ -3,6 +3,7 @@ package com.trackit.authservice.service;
 import com.trackit.authservice.entity.UserInfo;
 import com.trackit.authservice.event.UserInfoProducer;
 import com.trackit.authservice.model.UserInfoDto;
+import com.trackit.authservice.model.UserInfoEventDto;
 import com.trackit.authservice.repository.UserInfoRepository;
 import com.trackit.authservice.utils.Validation;
 import lombok.AllArgsConstructor;
@@ -58,8 +59,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String userId = UUID.randomUUID().toString();
         UserInfo userInfo = new UserInfo(userId, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>());
         userInfoRepository.save(userInfo);
-        userInfoProducer.sendEventToKafka(userInfoDto);
+        userInfoProducer.sendEventToKafka(converToUserInfoEvent(userInfoDto, userId));
         return userId;
+    }
+
+    private UserInfoEventDto converToUserInfoEvent(UserInfoDto userInfoDto, String userId) {
+        return UserInfoEventDto.builder()
+                .userId(userId)
+                .firstName(userInfoDto.getFirstName())
+                .lastName(userInfoDto.getLastName())
+                .email(userInfoDto.getEmail())
+                .phoneNumber(userInfoDto.getPhoneNumber())
+                .build();
     }
 
 }

@@ -2,11 +2,12 @@ package com.trackit.authservice.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trackit.authservice.model.UserInfoDto;
+import com.trackit.authservice.model.UserInfoEventDto;
 import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class UserInfoSerializer implements Serializer<UserInfoDto> {
+public class UserInfoSerializer implements Serializer<UserInfoEventDto> {
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
@@ -14,7 +15,7 @@ public class UserInfoSerializer implements Serializer<UserInfoDto> {
     }
 
     @Override
-    public byte[] serialize(String s, UserInfoDto userInfoDto) {
+    public byte[] serialize(String s, UserInfoEventDto userInfoDto) {
         byte[] retVal = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {

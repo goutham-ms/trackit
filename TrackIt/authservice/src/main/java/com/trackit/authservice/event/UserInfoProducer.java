@@ -1,6 +1,7 @@
 package com.trackit.authservice.event;
 
 import com.trackit.authservice.model.UserInfoDto;
+import com.trackit.authservice.model.UserInfoEventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,18 +12,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserInfoProducer {
-    private final KafkaTemplate<String, UserInfoDto> kafkaTemplate;
+    private final KafkaTemplate<String, UserInfoEventDto> kafkaTemplate;
 
     @Value("${spring.kafka.topic-json.name}")
     private String topicJsonName;
 
     @Autowired
-    public UserInfoProducer(KafkaTemplate<String, UserInfoDto> kafkaTemplate) {
+    public UserInfoProducer(KafkaTemplate<String, UserInfoEventDto> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendEventToKafka(UserInfoDto eventData) {
-        Message<UserInfoDto> message = MessageBuilder.withPayload(eventData)
+    public void sendEventToKafka(UserInfoEventDto eventData) {
+        Message<UserInfoEventDto> message = MessageBuilder.withPayload(eventData)
                 .setHeader(KafkaHeaders.TOPIC, topicJsonName).build();
         kafkaTemplate.send(message);
     }
