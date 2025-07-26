@@ -6,6 +6,7 @@ import com.trackit.userservice.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -39,7 +40,22 @@ public class UserInfoService {
 
         return new UserInfoDto(
                 userInfo.getUserId(),
-                userInfoDto.getFirstName(),
+                userInfo.getFirstName(),
+                userInfo.getLastName(),
+                userInfo.getPhoneNumber(),
+                userInfo.getEmail()
+        );
+    }
+
+    public UserInfoDto getUser(String userId) throws Exception{
+        Optional<UserInfo> user = userInfoRepository.findByUserId(userId);
+        if(user.isEmpty()) {
+            throw new Exception("User not found!");
+        }
+        UserInfo userInfo = user.get();
+        return new UserInfoDto(
+                userInfo.getUserId(),
+                userInfo.getFirstName(),
                 userInfo.getLastName(),
                 userInfo.getPhoneNumber(),
                 userInfo.getEmail()
