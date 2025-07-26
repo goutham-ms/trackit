@@ -13,8 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 public class UserInfo {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @Id
     private String userId;
     private String firstName;

@@ -38,13 +38,7 @@ public class UserInfoService {
                 .map(updateUser)
                 .orElseGet(createUser);
 
-        return new UserInfoDto(
-                userInfo.getUserId(),
-                userInfo.getFirstName(),
-                userInfo.getLastName(),
-                userInfo.getPhoneNumber(),
-                userInfo.getEmail()
-        );
+        return convertToDto(userInfo);
     }
 
     public UserInfoDto getUser(String userId) throws Exception{
@@ -53,18 +47,23 @@ public class UserInfoService {
             throw new Exception("User not found!");
         }
         UserInfo userInfo = user.get();
-        return new UserInfoDto(
-                userInfo.getUserId(),
-                userInfo.getFirstName(),
-                userInfo.getLastName(),
-                userInfo.getPhoneNumber(),
-                userInfo.getEmail()
-        );
+        return convertToDto(userInfo);
     }
 
 
     public UserInfo convertToUserInfo(UserInfoDto userInfo) {
         return UserInfo.builder()
+                .userId(userInfo.getUserId())
+                .firstName(userInfo.getFirstName())
+                .lastName(userInfo.getLastName())
+                .phoneNumber(userInfo.getPhoneNumber())
+                .email(userInfo.getEmail())
+                .build();
+    }
+
+    public UserInfoDto convertToDto(UserInfo userInfo) {
+        return UserInfoDto.builder()
+                .userId(userInfo.getUserId())
                 .firstName(userInfo.getFirstName())
                 .lastName(userInfo.getLastName())
                 .phoneNumber(userInfo.getPhoneNumber())
