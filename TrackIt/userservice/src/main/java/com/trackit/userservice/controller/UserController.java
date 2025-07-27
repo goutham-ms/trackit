@@ -26,9 +26,9 @@ public class UserController {
     }
 
     @GetMapping("/user/v1/user")
-    public ResponseEntity<UserInfoDto> getUser(@RequestBody String userId) {
+    public ResponseEntity<UserInfoDto> getUser(@RequestBody UserInfoDto userInfo) {
         try {
-            UserInfoDto user = userInfoService.getUser(userId);
+            UserInfoDto user = userInfoService.getUser(userInfo.getUserId());
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

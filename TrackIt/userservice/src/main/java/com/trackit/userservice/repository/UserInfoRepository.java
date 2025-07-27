@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserInfoRepository extends CrudRepository<UserInfo, String> {
-    Optional<UserInfo > findByUserId(String userId);
+    Optional<UserInfo> findByUserId(String userId);
 }
 
