@@ -41,6 +41,7 @@ public class TokenController {
                 return new ResponseEntity<>(JwtResponseDto.builder()
                         .accessToken(jwtService.generateToken(authRequestDto.getUsername()))
                         .token(refreshToken.getToken())
+                        .userId(userId)
                         .build(), HttpStatus.OK);
             }
         }
