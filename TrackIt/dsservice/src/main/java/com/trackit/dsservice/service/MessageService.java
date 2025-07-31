@@ -1,11 +1,13 @@
 package com.trackit.dsservice.service;
 
-import com.trackit.dsservice.entity.Message;
+import com.trackit.dsservice.entity.Expense;
+import com.trackit.dsservice.producer.ExpenseEventProducer;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class MessageService {
 
     private final ChatClient chatClient;
 
+    @Autowired
+    private  ExpenseEventProducer expenseEventProducer;
+
     public MessageService(ChatClient.Builder builder) {
         this.chatClient = builder
                 .defaultOptions(ChatOptions.builder().temperature(0.0d).build())
@@ -27,13 +32,13 @@ public class MessageService {
     @Value("classpath:/prompts/prompt.st")
     private Resource promptTemplate;
 
-    public Message llmCall(String message) {
+    public Expense llmCall(String message) {
       var system = new SystemMessage(promptTemplate);
       var msg = new UserMessage(message);
 
       return chatClient.prompt(new Prompt(List.of(system, msg)))
               .call()
-              .entity(Message.class);
+              .entity(Expense.class);
     }
 
     public boolean isBankSms(String message) {
@@ -59,7 +64,8 @@ public class MessageService {
 
     public void processMessage(String message) {
         if(isBankSms(message)) {
-            Message msg = llmCall(message);
+            Expense msg = llmCall(message);
+            expenseEventProducer.sendEventToKafka(msg);
             System.out.println(msg);
         }
     }
