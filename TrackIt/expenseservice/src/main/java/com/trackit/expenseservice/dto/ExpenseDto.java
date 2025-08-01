@@ -13,20 +13,14 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExpenseDto {
     private String externalId;
-    @JsonProperty(value = "user_id")
     private String userId;
     @NonNull
-    @JsonProperty(value = "amount")
     private String amount;
-    @JsonProperty(value = "merchant")
     private String merchant;
-    @JsonProperty(value = "currency")
     private String currency;
-    @JsonProperty(value = "created_at")
     private Timestamp createdAt;
 
 }

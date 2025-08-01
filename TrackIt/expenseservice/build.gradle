@@ -32,6 +32,7 @@ dependencies {
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
 	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
 	testImplementation group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+	implementation 'org.springframework.kafka:spring-kafka'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

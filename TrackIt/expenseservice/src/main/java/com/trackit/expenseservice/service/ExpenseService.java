@@ -38,7 +38,7 @@ public class ExpenseService {
     }
 
     public boolean updateExpense(ExpenseDto expenseDto) {
-        Optional<Expense> expenseFound = expenseRepository.findByUseIdAndExternalId(expenseDto.getUserId(), expenseDto.getExternalId());
+        Optional<Expense> expenseFound = expenseRepository.findByUserIdAndExternalId(expenseDto.getUserId(), expenseDto.getExternalId());
         if(expenseFound.isEmpty()) {
             return false;
         }
@@ -52,7 +52,7 @@ public class ExpenseService {
 
 
     public boolean deleteExpense(ExpenseDto expenseDto) {
-        Optional<Expense> expenseFound = expenseRepository.findByUseIdAndExternalId(expenseDto.getUserId(), expenseDto.getExternalId());
+        Optional<Expense> expenseFound = expenseRepository.findByUserIdAndExternalId(expenseDto.getUserId(), expenseDto.getExternalId());
         if(expenseFound.isEmpty()) {
             return false;
         }
